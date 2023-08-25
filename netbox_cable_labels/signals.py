@@ -20,3 +20,4 @@ def handle_new_cable_label(instance: Cable, created: bool, **kwargs):  # pylint:
     """
     if created and (instance.label is None or instance.label == ""):
         instance.label = render_label(instance)
+        instance.save()
