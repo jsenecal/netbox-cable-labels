@@ -19,5 +19,4 @@ def handle_new_cable_label(instance: Cable, created: bool, **kwargs):  # pylint:
     Update cable label if not defined when Cable is created.
     """
     if created and (instance.label is None or instance.label == ""):
-        instance.label = render_label(instance)
-        instance.save()
+        Cable.objects.filter(pk=instance.pk).update(label=render_label(instance))
