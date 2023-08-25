@@ -36,7 +36,10 @@ jobs:
           - 5432:5432
 
     steps:
-    - uses: actions/checkout@v3
+    - name: Checkout repo
+      uses: actions/checkout@v3
+      with:
+        path: netbox-cable-labels
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v4
       with:
