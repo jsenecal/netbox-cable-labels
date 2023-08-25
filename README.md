@@ -56,3 +56,11 @@ By default, the plugin copies the cable `id` in the label, prefixed with the pou
 ```
 "#{{cable.pk}}"
 ```
+
+## Management command
+
+Using `manage.py`, you can run the command `generate_labels` to automatically generate labels on cables that do not already have one set, based on the configured template.
+
+```
+./manage.py generate_labels
+```
