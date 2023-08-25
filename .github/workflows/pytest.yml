@@ -44,7 +44,6 @@ jobs:
         if [ -f requirements_dev.txt ]; then pip install -r requirements_dev.txt; fi
 
     - name: Install netbox-cable-labels
-      working-directory: netbox-cable-labels
       run: |
         pip install .
       
