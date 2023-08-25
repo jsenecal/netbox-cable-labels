@@ -48,3 +48,11 @@ PLUGINS_CONFIG = {
 ```
 
 > Please note that the cable instance is passed as `cable` to the templating engine.
+
+### Default configuration
+
+By default, the plugin copies the cable `id` in the label, prefixed with the pound (#) sign.
+
+```
+"#{{cable.pk}}"
+```
