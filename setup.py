@@ -42,5 +42,5 @@ setup(
     install_requires=[],
     packages=find_packages(include=["netbox_cable_labels", "netbox_cable_labels.*"]),
     include_package_data=True,
-    zip_safe=True,
+    zip_safe=False,
 )

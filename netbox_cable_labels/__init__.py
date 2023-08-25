@@ -1,25 +1,30 @@
-from extras.plugins import PluginConfig
+"""Top-level package for netbox_cable_labels."""
 
-__author__ = """Jonathan Senecal"""
+__author__ = "Jonathan Senecal"
 __email__ = "contact@jonathansenecal.com"
 __version__ = "0.0.1"
 
 
+from extras.plugins import PluginConfig
+
+
 class AutoCableLabelsConfig(PluginConfig):
-    """Plugin configuration for the auto_cable_label plugin."""
+    """Plugin configuration for the netbox_cable_labels plugin."""
 
     name = "netbox_cable_labels"
     verbose_name = "Automatic Cable Labels"
-    description = ("Plugin for NetBox that automatically adds labels to cables based on a customizable template.",)
-    author_email = ("contact@jonathansenecal.com",)
+    description = "Plugin for NetBox that automatically adds labels to cables based on a customizable template."
+    author_email = "contact@jonathansenecal.com"
     author = "Jonathan Senecal"
     version = __version__
     min_version = "3.5.0"
     default_settings = {"label_template": "#{{cable.pk}}"}
 
     def ready(self):
-        super(AutoCableLabelsConfig, self).ready()
-        from . import signals
+        super().ready()
+        from . import signals  # pylint: disable=unused-import,import-outside-toplevel
 
 
-config = AutoCableLabelsConfig
+config = AutoCableLabelsConfig  # pylint: disable=invalid-name
+
+print("netbox_cable_labels plugin loaded.")
