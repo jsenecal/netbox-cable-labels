@@ -1,6 +1,6 @@
 # NetBox Auto Cable Label Plugin
 
-Plugin for netbox that allows the automatic generation of labels for cables based on a user defined template
+Plugin for netbox that allows the automatic generation of the label field content for cables based on a user defined template
 
 * Free software: Apache-2.0
 
