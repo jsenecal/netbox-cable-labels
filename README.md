@@ -8,7 +8,7 @@ Plugin for netbox that allows the automatic generation of the label field conten
 
 | NetBox Version | Plugin Version |
 |----------------|----------------|
-|     3.5        |      0.0.1     |
+|     4.x        |      0.0.4     |
 
 
 ## Installing
