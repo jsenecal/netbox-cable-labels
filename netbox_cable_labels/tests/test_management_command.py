@@ -44,7 +44,7 @@ class GenerateLabelsCommandTestCase(TestCase):
         cls.device_a = Device.objects.create(
             name="Device A",
             device_type=cls.device_type,
-            device_role=cls.device_role,
+            role=cls.device_role,
             site=cls.site,
             rack=cls.rack,
             position=1,
@@ -54,7 +54,7 @@ class GenerateLabelsCommandTestCase(TestCase):
         cls.device_b = Device.objects.create(
             name="Device B",
             device_type=cls.device_type,
-            device_role=cls.device_role,
+            role=cls.device_role,
             site=cls.site,
             rack=cls.rack,
             position=2,

@@ -43,7 +43,7 @@ class RenderLabelTestCase(TestCase):
     @override_settings(
         PLUGINS_CONFIG={
             "netbox_cable_labels": {
-                "label_template": "{{cable.a_terminations.first.device.name}}-{{cable.b_terminations.first.device.name}}"
+                "label_template": "{{cable.a_terminations.first().device.name}}-{{cable.b_terminations.first().device.name}}"
             }
         }
     )
