@@ -75,9 +75,10 @@ class CableSignalTestCase(TestCase):
 
     def test_cable_label_auto_generated_on_create(self):
         """Test that a label is automatically generated when a cable is created without one."""
-        cable = Cable.objects.create()
-        cable.a_terminations.set([self.interface_a])
-        cable.b_terminations.set([self.interface_b])
+        cable = Cable(
+            a_terminations=[self.interface_a],
+            b_terminations=[self.interface_b]
+        )
         cable.save()
         
         # Refresh from database
@@ -90,9 +91,11 @@ class CableSignalTestCase(TestCase):
     def test_cable_label_not_overwritten(self):
         """Test that existing labels are not overwritten."""
         custom_label = "Custom Label"
-        cable = Cable.objects.create(label=custom_label)
-        cable.a_terminations.set([self.interface_a])
-        cable.b_terminations.set([self.interface_b])
+        cable = Cable(
+            label=custom_label,
+            a_terminations=[self.interface_a],
+            b_terminations=[self.interface_b]
+        )
         cable.save()
         
         # Refresh from database
@@ -104,9 +107,11 @@ class CableSignalTestCase(TestCase):
     def test_cable_label_generated_on_update_when_empty(self):
         """Test that a label is generated on update if it's empty."""
         # Create cable with custom label first
-        cable = Cable.objects.create(label="temporary")
-        cable.a_terminations.set([self.interface_a])
-        cable.b_terminations.set([self.interface_b])
+        cable = Cable(
+            label="temporary",
+            a_terminations=[self.interface_a],
+            b_terminations=[self.interface_b]
+        )
         cable.save()
         
         # Clear the label and save again
@@ -122,9 +127,11 @@ class CableSignalTestCase(TestCase):
     def test_cable_label_generated_on_update_when_none(self):
         """Test that a label is generated on update if it's None."""
         # Create cable with custom label first
-        cable = Cable.objects.create(label="temporary")
-        cable.a_terminations.set([self.interface_a])
-        cable.b_terminations.set([self.interface_b])
+        cable = Cable(
+            label="temporary",
+            a_terminations=[self.interface_a],
+            b_terminations=[self.interface_b]
+        )
         cable.save()
         
         # Set label to None and save again

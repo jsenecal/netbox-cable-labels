@@ -77,9 +77,12 @@ class GenerateLabelsCommandTestCase(TestCase):
     def test_generate_labels_for_cables_without_labels(self):
         """Test that the command generates labels for cables without labels."""
         # Create cables without labels (bypass signals by using update)
-        cable1 = Cable.objects.create(label="temp")
-        cable1.a_terminations.set([self.interface_a])
-        cable1.b_terminations.set([self.interface_b])
+        cable1 = Cable(
+            label="temp",
+            a_terminations=[self.interface_a],
+            b_terminations=[self.interface_b]
+        )
+        cable1.save()
         Cable.objects.filter(pk=cable1.pk).update(label="")
         
         # Create another interface for second cable
@@ -94,9 +97,12 @@ class GenerateLabelsCommandTestCase(TestCase):
             type="1000base-t"
         )
         
-        cable2 = Cable.objects.create(label="temp")
-        cable2.a_terminations.set([interface_a2])
-        cable2.b_terminations.set([interface_b2])
+        cable2 = Cable(
+            label="temp",
+            a_terminations=[interface_a2],
+            b_terminations=[interface_b2]
+        )
+        cable2.save()
         Cable.objects.filter(pk=cable2.pk).update(label="")
         
         # Run the command
@@ -118,9 +124,11 @@ class GenerateLabelsCommandTestCase(TestCase):
     def test_generate_labels_skips_existing_labels(self):
         """Test that the command skips cables with existing labels."""
         # Create cable with a label
-        cable = Cable.objects.create(label="Existing Label")
-        cable.a_terminations.set([self.interface_a])
-        cable.b_terminations.set([self.interface_b])
+        cable = Cable(
+            label="Existing Label",
+            a_terminations=[self.interface_a],
+            b_terminations=[self.interface_b]
+        )
         cable.save()
         
         # Run the command
@@ -140,9 +148,11 @@ class GenerateLabelsCommandTestCase(TestCase):
     def test_generate_labels_handles_empty_queryset(self):
         """Test that the command handles the case when no cables need labels."""
         # Create cable with a label
-        cable = Cable.objects.create(label="Has Label")
-        cable.a_terminations.set([self.interface_a])
-        cable.b_terminations.set([self.interface_b])
+        cable = Cable(
+            label="Has Label",
+            a_terminations=[self.interface_a],
+            b_terminations=[self.interface_b]
+        )
         cable.save()
         
         # Run the command
