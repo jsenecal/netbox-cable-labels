@@ -63,6 +63,10 @@ By default, the plugin copies the cable `id` in the label, prefixed with the pou
 "#{{cable.pk}}"
 ```
 
+### Template Examples
+
+See [TEMPLATES.md](TEMPLATES.md) for comprehensive template examples including TIA-606-C compliant formats and various labeling scenarios.
+
 ## Management command
 
 Using `manage.py`, you can run the command `generate_labels` to automatically generate labels on cables that do not already have one set, based on the configured template.
