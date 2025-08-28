@@ -2,7 +2,7 @@
 
 __author__ = "Jonathan Senecal"
 __email__ = "contact@jonathansenecal.com"
-__version__ = "0.0.4"
+__version__ = "0.1.0"
 
 from netbox.plugins import PluginConfig
 
