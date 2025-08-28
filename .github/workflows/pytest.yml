@@ -15,8 +15,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.9", "3.10", "3.11"]
-        netbox-version: ["v3.5.8"]
+        python-version: ["3.10", "3.11", "3.12"]
+        netbox-version: ["v4.2.0", "v4.3.0"]
     services:
       redis:
         image: redis
@@ -57,7 +57,7 @@ jobs:
     - name: Install dependencies & set up configuration
       working-directory: netbox
       run: |
-        ln -s $(pwd)/../netbox-inventory/testing/configuration.testing.py netbox/netbox/configuration.py
+        ln -s $(pwd)/../netbox-cable-labels/testing/configuration.testing.py netbox/netbox/configuration.py
         python -m pip install --upgrade pip
         pip install -r requirements.txt -U
     - name: Run tests
