@@ -1,0 +1,39 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "netbox-cable-labels"
+dynamic = ["version"]
+description = "NetBox plugin for automatic cable label generation"
+readme = "README.md"
+authors = [
+    {name = "Jonathan Senecal", email = "contact@jonathansenecal.com"}
+]
+license = "Apache-2.0"
+requires-python = ">=3.10"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Plugins",
+    "Framework :: Django",
+    "Intended Audience :: System Administrators",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: System :: Networking",
+]
+keywords = ["netbox", "netbox-plugin", "cable-management", "labeling"]
+dependencies = []
+
+[project.urls]
+Homepage = "https://github.com/jsenecal/netbox-cable-labels"
+Repository = "https://github.com/jsenecal/netbox-cable-labels.git"
+Issues = "https://github.com/jsenecal/netbox-cable-labels/issues"
+
+[tool.setuptools.packages.find]
+include = ["netbox_cable_labels*"]
+
+[tool.setuptools.dynamic]
+version = {attr = "netbox_cable_labels.__version__"}

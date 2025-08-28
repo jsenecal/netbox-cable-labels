@@ -8,7 +8,7 @@ Plugin for netbox that allows the automatic generation of the label field conten
 
 | NetBox Version | Plugin Version |
 |----------------|----------------|
-|     4.x        |      0.0.4     |
+|     4.x        |      0.1.x     |
 
 
 ## Installing
@@ -16,7 +16,13 @@ Plugin for netbox that allows the automatic generation of the label field conten
 For adding to a NetBox Docker setup see
 [the general instructions for using netbox-docker with plugins](https://github.com/netbox-community/netbox-docker/wiki/Using-Netbox-Plugins).
 
-While this is still in development and not yet on pypi you can install with pip:
+### Install from PyPI
+
+```bash
+pip install netbox-cable-labels
+```
+
+### Install from GitHub
 
 ```bash
 pip install git+https://github.com/jsenecal/netbox-cable-labels
@@ -25,7 +31,7 @@ pip install git+https://github.com/jsenecal/netbox-cable-labels
 or by adding to your `local_requirements.txt` or `plugin_requirements.txt` (netbox-docker):
 
 ```bash
-git+https://github.com/jsenecal/netbox-cable-labels
+netbox-cable-labels
 ```
 
 Enable the plugin in `/opt/netbox/netbox/netbox/configuration.py`,

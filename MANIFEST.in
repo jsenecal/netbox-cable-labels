@@ -1,9 +1,13 @@
 include CONTRIBUTING.md
 include LICENSE
 include README.md
+include pyproject.toml
 
-recursive-include tests *
+recursive-include netbox_cable_labels *.py
+recursive-include netbox_cable_labels/management *
+recursive-include netbox_cable_labels/tests *
 recursive-exclude * __pycache__
 recursive-exclude * *.py[co]
-
-recursive-include docs *.rst conf.py Makefile make.bat *.jpg *.png *.gif
+recursive-exclude * .gitignore
+prune testing
+prune docs
