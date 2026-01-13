@@ -59,6 +59,10 @@ jobs:
         repository: "netbox-community/netbox"
         ref: ${{ matrix.netbox-version }}
         path: netbox
+    - name: Install system dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libpq-dev
     - name: Install netbox-cable-labels
       run: |
         pip install .
