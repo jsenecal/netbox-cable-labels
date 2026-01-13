@@ -17,15 +17,20 @@ jobs:
       matrix:
         include:
           # NetBox 4.2.x and 4.3.x support Python 3.10-3.12
+          # These versions require psycopg-c < 3.2.10 which needs PG 16 headers
           - python-version: "3.10"
             netbox-version: "v4.2.0"
+            pg-version: "16"
           - python-version: "3.11"
             netbox-version: "v4.3.0"
+            pg-version: "16"
           - python-version: "3.12"
             netbox-version: "v4.3.0"
+            pg-version: "16"
           # NetBox 4.5.x only supports Python 3.12
           - python-version: "3.12"
             netbox-version: "v4.5.0"
+            pg-version: "18"
     services:
       redis:
         image: redis
@@ -59,6 +64,15 @@ jobs:
         repository: "netbox-community/netbox"
         ref: ${{ matrix.netbox-version }}
         path: netbox
+    - name: Install PostgreSQL ${{ matrix.pg-version }} headers
+      run: |
+        sudo apt-get remove -y libpq-dev libpq5 || true
+        sudo apt-get install -y curl ca-certificates
+        sudo install -d /usr/share/postgresql-common/pgdg
+        sudo curl -o /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc --fail https://www.postgresql.org/media/keys/ACCC4CF8.asc
+        echo "deb [signed-by=/usr/share/postgresql-common/pgdg/apt.postgresql.org.asc] https://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" | sudo tee /etc/apt/sources.list.d/pgdg.list
+        sudo apt-get update
+        sudo apt-get install -y libpq-dev=${{ matrix.pg-version }}*
     - name: Install netbox-cable-labels
       run: |
         pip install .
