@@ -48,13 +48,11 @@ The dev container includes:
 - Testing tools (pytest, pytest-django, pytest-cov, factory-boy)
 - Git and git-flow
 
-### Sample Data
+### Demo Data
 
-The environment includes sample data for testing:
-- Site: "Sample Site"
-- Rack: "Rack 1A"
-- Devices: switch-01, switch-02
-- Sample cable with auto-generated label
+The environment automatically loads [netbox-demo-data](https://github.com/netbox-community/netbox-demo-data) on first startup, providing sample sites, racks, devices, and cables for testing.
+
+To disable demo data loading, set `LOAD_DEMO_DATA=false` in your environment.
 
 ## Common Development Tasks
 
@@ -123,10 +121,11 @@ uv pip install --system --upgrade <package-name>
 
 1. **Django Debug Toolbar**: Available in the browser when DEBUG=True
 2. **IPython Shell**: Use for interactive debugging
+
    ```python
    from dcim.models import Cable
    from netbox_cable_labels.utils import render_label
-   
+
    cable = Cable.objects.first()
    label = render_label(cable)
    print(label)
@@ -184,18 +183,22 @@ print(f"Created cable {cable.pk} with label: {cable.label}")
 ## Troubleshooting
 
 ### Container won't start
+
 - Check Docker is running
-- Ensure ports 8000, 5432, 6379 are not in use
+- Ensure ports 8003, 5432, 6379 are not in use
 - Try rebuilding: "Dev Containers: Rebuild Container"
 
 ### Plugin not loading
+
 - Check `PLUGINS` setting in configuration.py
 - Verify plugin is installed: `pip show netbox-cable-labels`
 - Check NetBox logs for errors
 
 ### Database errors
+
 - Ensure migrations are applied
-- Try resetting database: 
+- Try resetting database:
+
   ```bash
   docker-compose down -v
   docker-compose up -d

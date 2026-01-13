@@ -4,7 +4,6 @@ FROM ghcr.io/netbox-community/netbox:${NETBOX_VARIANT}
 
 VOLUME [ "/etc/netbox/scripts" ]
 
-ARG NETBOX_INITIALIZERS_VARIANT=4.4.*
 ARG DEBIAN_FRONTEND=noninteractive
 
 # Install APT packages
@@ -63,8 +62,6 @@ RUN curl "https://raw.githubusercontent.com/oh-my-fish/oh-my-fish/master/bin/ins
 
 # Add Claude Code to the devcontainer
 RUN mkdir -p ~/.npm && npm config set prefix ~/.npm && npm install -g @anthropic-ai/claude-code
-
-RUN /usr/local/bin/uv pip install netbox-initializers==$NETBOX_INITIALIZERS_VARIANT
 
 # WORKDIR ${PLUGIN_PATH}
 RUN uv pip install --no-cache-dir -e /opt/netbox-cable-labels
