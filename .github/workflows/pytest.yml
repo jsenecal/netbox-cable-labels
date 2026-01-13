@@ -16,18 +16,17 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          # NetBox 4.2.x and 4.3.x support Python 3.10-3.12
-          # These versions require psycopg-c < 3.2.10 which needs PG 16 headers
+          # NetBox 4.2.x and 4.3.x require psycopg-c < 3.2.10 which needs PG 16 headers
           - python-version: "3.10"
-            netbox-version: "v4.2.0"
+            netbox-version: "v4.2.9"
             pg-version: "16"
           - python-version: "3.11"
-            netbox-version: "v4.3.0"
+            netbox-version: "v4.3.7"
             pg-version: "16"
+          # NetBox 4.4.x and 4.5.x use psycopg >= 3.2.10 which supports PG 18
           - python-version: "3.12"
-            netbox-version: "v4.3.0"
-            pg-version: "16"
-          # NetBox 4.5.x only supports Python 3.12
+            netbox-version: "v4.4.10"
+            pg-version: "18"
           - python-version: "3.12"
             netbox-version: "v4.5.0"
             pg-version: "18"
@@ -83,7 +82,16 @@ jobs:
         ln -s $(pwd)/../netbox-cable-labels/testing/configuration.testing.py netbox/netbox/configuration.py
         python -m pip install --upgrade pip
         pip install -r requirements.txt -U
-    - name: Run tests
+        pip install coverage
+    - name: Run tests with coverage
       working-directory: netbox
       run: |
-        python netbox/manage.py test netbox_cable_labels.tests -v 2
+        coverage run --source=netbox_cable_labels netbox/manage.py test netbox_cable_labels.tests -v 2
+        coverage xml -o ../netbox-cable-labels/coverage.xml
+        coverage report
+    - name: Upload coverage to Codecov
+      if: matrix.netbox-version == 'v4.5.0'
+      uses: codecov/codecov-action@v5
+      with:
+        files: netbox-cable-labels/coverage.xml
+        fail_ci_if_error: false

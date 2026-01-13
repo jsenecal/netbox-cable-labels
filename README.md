@@ -1,5 +1,8 @@
 # NetBox Auto Cable Label Plugin
 
+[![CI](https://github.com/jsenecal/netbox-cable-labels/actions/workflows/pytest.yml/badge.svg)](https://github.com/jsenecal/netbox-cable-labels/actions/workflows/pytest.yml)
+[![codecov](https://codecov.io/gh/jsenecal/netbox-cable-labels/graph/badge.svg)](https://codecov.io/gh/jsenecal/netbox-cable-labels)
+
 Plugin for netbox that allows the automatic generation of the label field content for cables based on a user defined template
 
 * Free software: Apache-2.0
