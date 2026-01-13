@@ -1,7 +1,9 @@
 """Test TIA-606-C compliant template rendering."""
 
+from unittest.mock import Mock
+
 from django.test import TestCase, override_settings
-from unittest.mock import Mock, MagicMock
+
 from netbox_cable_labels.utils import render_label
 
 
@@ -13,38 +15,38 @@ class TIA606CTemplateTestCase(TestCase):
         # Create mock site objects
         self.mock_site_a = Mock()
         self.mock_site_a.name = "NYC"
-        
+
         self.mock_site_b = Mock()
         self.mock_site_b.name = "NYC"
-        
+
         # Create mock location objects
         self.mock_location_a = Mock()
         self.mock_location_a.name = "Floor2"
-        
+
         self.mock_location_b = Mock()
         self.mock_location_b.name = "Floor1"
-        
+
         # Create mock rack objects
         self.mock_rack_a = Mock()
         self.mock_rack_a.name = "R1A"
-        
+
         self.mock_rack_b = Mock()
         self.mock_rack_b.name = "R2B"
-        
+
         # Create mock manufacturer
         self.mock_manufacturer_a = Mock()
         self.mock_manufacturer_a.name = "Cisco"
-        
+
         self.mock_manufacturer_b = Mock()
         self.mock_manufacturer_b.name = "HPE"
-        
+
         # Create mock device type
         self.mock_device_type_a = Mock()
         self.mock_device_type_a.manufacturer = self.mock_manufacturer_a
-        
+
         self.mock_device_type_b = Mock()
         self.mock_device_type_b.manufacturer = self.mock_manufacturer_b
-        
+
         # Create mock device objects
         self.mock_device_a = Mock()
         self.mock_device_a.name = "SW01"
@@ -54,7 +56,7 @@ class TIA606CTemplateTestCase(TestCase):
         self.mock_device_a.position = 42
         self.mock_device_a.face = "front"
         self.mock_device_a.device_type = self.mock_device_type_a
-        
+
         self.mock_device_b = Mock()
         self.mock_device_b.name = "SW02"
         self.mock_device_b.site = self.mock_site_b
@@ -63,23 +65,23 @@ class TIA606CTemplateTestCase(TestCase):
         self.mock_device_b.position = 10
         self.mock_device_b.face = "rear"
         self.mock_device_b.device_type = self.mock_device_type_b
-        
+
         # Create mock termination objects
         self.mock_termination_a = Mock()
         self.mock_termination_a.device = self.mock_device_a
         self.mock_termination_a.name = "gi1/0/1"
-        
+
         self.mock_termination_b = Mock()
         self.mock_termination_b.device = self.mock_device_b
         self.mock_termination_b.name = "eth1/1"
-        
+
         # Create mock terminations manager
         self.mock_a_terminations = Mock()
         self.mock_a_terminations.first.return_value = self.mock_termination_a
-        
+
         self.mock_b_terminations = Mock()
         self.mock_b_terminations.first.return_value = self.mock_termination_b
-        
+
         # Create mock cable object
         self.mock_cable = Mock()
         self.mock_cable.pk = 123
@@ -171,14 +173,14 @@ class TIA606CTemplateTestCase(TestCase):
         mock_device_minimal.site = None
         mock_device_minimal.rack = None
         mock_device_minimal.location = None
-        
+
         mock_termination_minimal = Mock()
         mock_termination_minimal.device = mock_device_minimal
         mock_termination_minimal.name = "port1"
-        
+
         mock_terminations = Mock()
         mock_terminations.first.return_value = mock_termination_minimal
-        
+
         mock_cable_minimal = Mock()
         mock_cable_minimal.pk = 456
         mock_cable_minimal.type = None
@@ -186,7 +188,7 @@ class TIA606CTemplateTestCase(TestCase):
         mock_cable_minimal.length = None
         mock_cable_minimal.a_terminations = mock_terminations
         mock_cable_minimal.b_terminations = mock_terminations
-        
+
         with override_settings(
             PLUGINS_CONFIG={
                 "netbox_cable_labels": {
@@ -210,7 +212,7 @@ class TIA606CTemplateTestCase(TestCase):
         self.mock_cable.type = "SM-OS2"
         label = render_label(self.mock_cable)
         self.assertEqual(label, "FO-R1A-gi1/0/1/R2B-eth1/1/SM-OS2")
-        
+
         # Test with copper cable
         self.mock_cable.type = "CAT6A"
         label = render_label(self.mock_cable)
@@ -241,7 +243,7 @@ class TIA606CTemplateTestCase(TestCase):
         # With location
         label = render_label(self.mock_cable)
         self.assertIn("Floor2.SW01", label)
-        
+
         # Without location (should fall back to site)
         self.mock_device_a.location = None
         label = render_label(self.mock_cable)

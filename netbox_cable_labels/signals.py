@@ -1,11 +1,12 @@
-from .utils import render_label
 from dcim.models.cables import Cable
-from django.db.models.signals import pre_save, post_save
+from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
+
+from .utils import render_label
 
 
 @receiver(pre_save, sender=Cable)
-def handle_cable_label(instance: Cable, **kwargs):  # pylint: disable=unused-argument
+def handle_cable_label(instance: Cable, **_kwargs):
     """
     Update cable label if not defined when Cable is updated.
     """
@@ -14,7 +15,7 @@ def handle_cable_label(instance: Cable, **kwargs):  # pylint: disable=unused-arg
 
 
 @receiver(post_save, sender=Cable)
-def handle_new_cable_label(instance: Cable, created: bool, **kwargs):  # pylint: disable=unused-argument
+def handle_new_cable_label(instance: Cable, created: bool, **_kwargs):
     """
     Update cable label if not defined when Cable is created.
     """

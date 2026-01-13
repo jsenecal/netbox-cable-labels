@@ -1,7 +1,7 @@
-from django.core.management.base import BaseCommand, CommandError
-from netbox_cable_labels.utils import render_label
-
 from dcim.models.cables import Cable
+from django.core.management.base import BaseCommand, CommandError
+
+from netbox_cable_labels.utils import render_label
 
 
 class Command(BaseCommand):
@@ -10,7 +10,7 @@ class Command(BaseCommand):
 
     help = "Uses the predefined template to generate labels for all cables with a missing label."
 
-    def handle(self, *args, **options):  # pylint: disable=unused-argument
+    def handle(self, *_args, **_options):
         cables_qs = Cable.objects.filter(label="")
         for cable in cables_qs:
             try:
@@ -19,6 +19,4 @@ class Command(BaseCommand):
             except Exception as exc:  # pylint: disable=broad-except
                 raise exc from CommandError(f"Error while generating label for cable {cable}")
 
-            self.stdout.write(
-                self.style.SUCCESS('Successfully updated cable "%s"' % cable)  # pylint: disable=no-member
-            )
+            self.stdout.write(self.style.SUCCESS(f'Successfully updated cable "{cable}"'))

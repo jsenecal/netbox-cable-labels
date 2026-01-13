@@ -4,7 +4,7 @@ try:
     from netbox.plugins.utils import get_plugin_config
 except ImportError:
     from netbox.plugins import get_plugin_config  # type: ignore
-from jinja2 import Environment, BaseLoader
+from jinja2 import BaseLoader, Environment
 
 
 def render_label(cable: Cable):
