@@ -1,0 +1,72 @@
+ARG NETBOX_VARIANT=v4.5.0-3.4.2
+
+FROM ghcr.io/netbox-community/netbox:${NETBOX_VARIANT}
+
+VOLUME [ "/etc/netbox/scripts" ]
+
+ARG NETBOX_INITIALIZERS_VARIANT=4.4.*
+ARG DEBIAN_FRONTEND=noninteractive
+
+# Install APT packages
+# hadolint ignore=DL3008
+RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
+    && apt-get -y install --no-install-recommends curl git make openssh-client python3-dev sudo wget fish npm \
+    && apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/*
+
+# Install development & ide dependencies
+COPY .devcontainer/requirements-dev.txt /tmp/pip-tmp/
+RUN /usr/local/bin/uv pip install --disable-pip-version-check --no-cache-dir -r /tmp/pip-tmp/requirements-dev.txt && rm -rf /tmp/*
+RUN curl -L -o /usr/local/bin/hadolint https://github.com/hadolint/hadolint/releases/download/v2.12.0/hadolint-Linux-x86_64 \
+    && chmod +x /usr/local/bin/hadolint
+
+# Install GitLab CLI (glab)
+RUN curl -L -o /tmp/glab.deb https://gitlab.com/gitlab-org/cli/-/releases/v1.74.0/downloads/glab_1.74.0_linux_amd64.deb \
+    && dpkg -i /tmp/glab.deb \
+    && rm /tmp/glab.deb
+
+# Install GitHub CLI (gh)
+# hadolint ignore=DL3008
+RUN mkdir -p -m 755 /etc/apt/keyrings \
+    && wget -nv -O /tmp/githubcli-archive-keyring.gpg https://cli.github.com/packages/githubcli-archive-keyring.gpg \
+    && cat /tmp/githubcli-archive-keyring.gpg | tee /etc/apt/keyrings/githubcli-archive-keyring.gpg > /dev/null \
+    && chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg \
+    && echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends gh \
+    && apt-get clean -y && rm -rf /var/lib/apt/lists/* /tmp/*
+
+# Copy the entrypoint script
+COPY .devcontainer/entrypoint-dev.sh /bin/entrypoint-dev.sh
+RUN chmod +x /bin/entrypoint-dev.sh
+
+ARG USERNAME=ubuntu
+ARG USER_UID=1000
+ARG USER_GID=$USER_UID
+
+RUN chsh -s /usr/bin/fish $USERNAME; \
+    chown -R $USER_UID:$USER_GID /home/ubuntu; \
+    chown -R $USER_UID:$USER_GID /etc/netbox/scripts; \
+    usermod -aG sudo $USERNAME \
+    && echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers.d/nopasswd
+
+# Copy the plugin code
+COPY . /opt/netbox-cable-labels
+
+RUN chown $USERNAME:$USERNAME /opt/netbox-cable-labels /opt/netbox /etc/netbox /opt/unit -R
+
+USER ${USERNAME}
+
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
+# Add ohmyfish
+RUN curl "https://raw.githubusercontent.com/oh-my-fish/oh-my-fish/master/bin/install" > /tmp/install_omf && fish /tmp/install_omf --noninteractive && rm /tmp/install_omf && fish -c "omf install bobthefish"
+
+# Add Claude Code to the devcontainer
+RUN mkdir -p ~/.npm && npm config set prefix ~/.npm && npm install -g @anthropic-ai/claude-code
+
+RUN /usr/local/bin/uv pip install netbox-initializers==$NETBOX_INITIALIZERS_VARIANT
+
+# WORKDIR ${PLUGIN_PATH}
+RUN uv pip install --no-cache-dir -e /opt/netbox-cable-labels
+
+ENTRYPOINT ["/bin/entrypoint-dev.sh"]

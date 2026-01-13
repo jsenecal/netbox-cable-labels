@@ -1,0 +1,98 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
+// https://github.com/microsoft/vscode-dev-containers/tree/v0.238.0/containers/python-3-postgres
+// Update the VARIANT arg in docker-compose.yml to pick a Python version
+{
+	"name": "NetBox Cable Labels Development",
+	"dockerComposeFile": [
+		"docker-compose.yml"
+	],
+	"service": "netbox",
+	//"workspaceMount": "source=${localWorkspaceFolder},target=/opt/netbox-cable-labels,type=bind,consistency=cached",
+	"workspaceFolder": "/opt/netbox-cable-labels",
+	"overrideCommand": false,
+	// Configure tool-specific properties.
+	"customizations": {
+		// Configure properties specific to VS Code.
+		"vscode": {
+			// Set *default* container specific settings.json values on container create.
+			"settings": {
+				"editor.experimental.stickyScroll.enabled": true,
+				"isort.args": [
+					"--profile=black"
+				],
+				"python.analysis.typeCheckingMode": "basic",
+				"python.analysis.extraPaths": [
+					"/opt/netbox/netbox"
+				],
+				"python.autoComplete.extraPaths": [
+					"/opt/netbox/netbox"
+				],
+				"python.defaultInterpreterPath": "/opt/netbox/venv/bin/python3",
+				"python.formatting.autopep8Path": "/opt/netbox/venv/bin/autopep8",
+				"python.formatting.blackPath": "/opt/netbox/venv/bin/black",
+				"python.formatting.provider": "black",
+				"python.formatting.yapfPath": "/opt/netbox/venv/bin/yapf",
+				"python.pythonPath": "/opt/netbox/venv/bin/python3",
+				"python.terminal.activateEnvironment": true,
+				"python.venvPath": "/opt/netbox/",
+				"python.linting.enabled": true,
+				"python.linting.pylintArgs": [
+					"--load-plugins",
+					"pylint_django",
+					"--django-settings-module=netbox.settings"
+				],
+				"files.exclude": {
+					"**/node_modules": true,
+					"build": true,
+					"dist": true,
+					"*egg*": true
+				},
+				"dev.containers.copyGitConfig": true
+			},
+			// Add the IDs of extensions you want installed when the container is created.
+			"extensions": [
+				"DavidAnson.vscode-markdownlint",
+				"GitHub.codespaces",
+				"GitHub.copilot",
+				"GitHub.copilot-labs",
+				"GitHub.vscode-pull-request-github",
+				"Gruntfuggly.todo-tree",
+				"Tyriar.sort-lines",
+				"aaron-bond.better-comments",
+				"alefragnani.bookmarks",
+				"batisteo.vscode-django",
+				"charliermarsh.ruff",
+				"codezombiech.gitignore",
+				"esbenp.prettier-vscode",
+				"exiasr.hadolint",
+				"formulahendry.auto-rename-tag",
+				"mintlify.document",
+				"ms-azuretools.vscode-docker",
+				"ms-python.black-formatter",
+				"ms-python.isort",
+				"ms-python.pylint",
+				"ms-python.python",
+				"ms-python.vscode-pylance",
+				"ms-vscode.makefile-tools",
+				"ms-python.debugpy",
+				"monosans.djlint",
+				"mutantdino.resourcemonitor",
+				"oderwat.indent-rainbow",
+				"paulomenezes.duplicated-code",
+				"redhat.vscode-yaml",
+				"samuelcolvin.jinjahtml",
+				"searKing.preview-vscode",
+				"wholroyd.jinja",
+				"yzhang.markdown-all-in-one"
+			]
+		}
+	},
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	// This can be used to network with other containers or the host.
+	// "forwardPorts": [5000, 5432],
+	// Use 'postCreateCommand' to run commands after the container is created.
+	// "postCreateCommand": "pip install --editable /opt/netbox-cable-labels",
+	//"postAttachCommand": "source /opt/netbox/venv/bin/activate",
+	// Comment out to connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
+	"remoteUser": "ubuntu"
+}

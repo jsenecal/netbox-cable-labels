@@ -1,0 +1,15 @@
+bandit
+debugpy
+djlint
+ipython
+mypy
+pre-commit
+pytest
+pytest-mock
+pytest-cov
+pytest-django
+mock
+rich
+ruff
+sourcery-analytics
+wily

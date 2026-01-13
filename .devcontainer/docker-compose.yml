@@ -1,0 +1,62 @@
+---
+services:
+  netbox: &netbox
+    container_name: netbox-cable-labels-devcontainer
+    image: netboxcommunity/netbox:${NETBOX_VARIANT-latest}-cable-labels-devcontainer
+    depends_on:
+      - postgres
+      - redis
+    build:
+      dockerfile: .devcontainer/Dockerfile-plugin_dev
+      context: ..
+    env_file: env/netbox.env
+    volumes:
+      - ../:/opt/netbox-cable-labels:cached
+      - ~/.gitconfig:/home/ubuntu/.gitconfig:z,ro
+      - ~/.ssh:/home/ubuntu/.ssh
+      - ~/.claude:/home/ubuntu/.claude
+      - ~/.config:/home/ubuntu/.config
+      - ./configuration:/etc/netbox/config:z,ro
+      - netbox-cable-labels-scripts:/etc/netbox/scripts
+    ports:
+      - "8003:8000"
+    command:
+      - sleep
+      - infinity
+  netbox-worker:
+    <<: *netbox
+    container_name: netbox-cable-labels-worker
+    command:
+      - /opt/netbox/venv/bin/python
+      - /opt/netbox/netbox/manage.py
+      - rqworker
+    ports: []
+    healthcheck:
+      start_period: 20s
+      timeout: 3s
+      interval: 15s
+      test: "ps -aux | grep -v grep | grep -q rqworker || exit 1"
+
+  # postgres
+  postgres:
+    container_name: netbox-cable-labels-postgres
+    image: postgres:15-alpine
+    env_file: env/postgres.env
+    volumes:
+      - netbox-cable-labels-postgres-data:/var/lib/postgresql/data
+
+  # redis
+  redis:
+    container_name: netbox-cable-labels-redis
+    image: redis:7-alpine
+    command:
+      - sh
+      - -c # this is to evaluate the $REDIS_PASSWORD from the env
+      - redis-server --appendonly yes --requirepass $$REDIS_PASSWORD ## $$ because of docker-compose
+    env_file: env/redis.env
+
+volumes:
+  netbox-cable-labels-postgres-data:
+    driver: local
+  netbox-cable-labels-scripts:
+    driver: local

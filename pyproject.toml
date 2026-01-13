@@ -37,3 +37,57 @@ include = ["netbox_cable_labels*"]
 
 [tool.setuptools.dynamic]
 version = {attr = "netbox_cable_labels.__version__"}
+
+[tool.ruff]
+target-version = "py310"
+line-length = 120
+select = [
+    "E",     # pycodestyle errors
+    "W",     # pycodestyle warnings
+    "F",     # pyflakes
+    "I",     # isort
+    "B",     # flake8-bugbear
+    "C4",    # flake8-comprehensions
+    "UP",    # pyupgrade
+    "ARG",   # flake8-unused-arguments
+    "SIM",   # flake8-simplify
+    "PL",    # pylint
+]
+ignore = [
+    "E501",  # line too long (handled by formatter)
+    "E731",  # lambda assignment
+    "PLR0913", # too many arguments
+    "PLR2004", # magic value comparison
+]
+
+[tool.ruff.per-file-ignores]
+"__init__.py" = ["F401"]  # unused imports in __init__ files
+"tests/*" = ["ARG", "PLR"]  # relax some rules for tests
+
+[tool.ruff.isort]
+known-third-party = ["django", "netbox", "dcim", "utilities"]
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "netbox.settings"
+python_files = ["test_*.py"]
+addopts = "-vv --tb=short"
+testpaths = ["netbox_cable_labels/tests"]
+
+[tool.coverage.run]
+source = ["netbox_cable_labels"]
+omit = [
+    "*/tests/*",
+    "*/migrations/*",
+    "*/__init__.py",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "def __str__",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+    "if TYPE_CHECKING:",
+]
