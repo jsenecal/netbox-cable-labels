@@ -15,8 +15,17 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.10", "3.11", "3.12"]
-        netbox-version: ["v4.2.0", "v4.3.0"]
+        include:
+          # NetBox 4.2.x and 4.3.x support Python 3.10-3.12
+          - python-version: "3.10"
+            netbox-version: "v4.2.0"
+          - python-version: "3.11"
+            netbox-version: "v4.3.0"
+          - python-version: "3.12"
+            netbox-version: "v4.3.0"
+          # NetBox 4.5.x only supports Python 3.12
+          - python-version: "3.12"
+            netbox-version: "v4.5.0"
     services:
       redis:
         image: redis
