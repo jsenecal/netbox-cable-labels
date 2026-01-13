@@ -49,39 +49,48 @@ If you are proposing a feature:
 Ready to contribute? Here's how to set up `netbox_cable_labels` for local development.
 
 1. Fork the `netbox-cable-labels` repo on GitHub.
+
 2. Clone your fork locally
 
-    ```
-    $ git clone git@github.com:your_name_here/netbox-cable-labels.git
+    ```bash
+    git clone git@github.com:your_name_here/netbox-cable-labels.git
     ```
 
-3. Install dependencies and start your virtualenv:
+3. Set up your development environment using VS Code Dev Containers (recommended):
 
-    ```
-    $ poetry install -E test -E doc -E dev
-    ```
+    - Open VS Code
+    - Install the "Dev Containers" extension
+    - Open the command palette (F1) and run "Dev Containers: Open Folder in Container..."
+    - Select the cloned repository folder
+
+    See [DEVELOPMENT.md](DEVELOPMENT.md) for detailed setup instructions.
 
 4. Create a branch for local development:
 
-    ```
-    $ git checkout -b name-of-your-bugfix-or-feature
+    ```bash
+    git checkout -b name-of-your-bugfix-or-feature
     ```
 
     Now you can make your changes locally.
 
-5. When you're done making changes, check that your changes pass the
-   tests, including testing other Python versions, with tox:
+5. When you're done making changes, check that your changes pass linting and tests:
 
+    ```bash
+    # Run linting
+    ruff check netbox_cable_labels/
+
+    # Run tests
+    pytest netbox_cable_labels/tests/
     ```
-    $ poetry run tox
-    ```
+
+    Pre-commit hooks will also run automatically on commit.
 
 6. Commit your changes and push your branch to GitHub:
 
-    ```
-    $ git add .
-    $ git commit -m "Your detailed description of your changes."
-    $ git push origin name-of-your-bugfix-or-feature
+    ```bash
+    git add .
+    git commit -m "Your detailed description of your changes."
+    git push origin name-of-your-bugfix-or-feature
     ```
 
 7. Submit a pull request through the GitHub website.
@@ -94,21 +103,19 @@ Before you submit a pull request, check that it meets these guidelines:
 2. If the pull request adds functionality, the docs should be updated. Put
    your new functionality into a function with a docstring, and add the
    feature to the list in README.md.
-3. The pull request should work for Python 3.9 and above. Check
+3. The pull request should work for Python 3.10+ (3.12 required for NetBox 4.5+). Check
    https://github.com/jsenecal/netbox-cable-labels/actions
    and make sure that the tests pass for all supported Python versions.
-
 
 ## Deploying
 
 A reminder for the maintainers on how to deploy.
 Make sure all your changes are committed (including an entry in CHANGELOG.md).
-Then run:
+Then create and push a version tag:
 
-```
-$ poetry run bump2version patch # possible: major / minor / patch
-$ git push
-$ git push --tags
+```bash
+git tag v1.0.0
+git push origin v1.0.0
 ```
 
 GitHub Actions will then deploy to PyPI if tests pass.
